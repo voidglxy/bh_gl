@@ -1,2 +1,2 @@
-# FPS_GL
-First-person shooter made with Open GL and C.
+# BH_GL
+bullet hell with open gl maybe
