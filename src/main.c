@@ -1,19 +1,4 @@
-#include "../lib/glad/glad/glad.h"
-#include <cglm/affine.h>
-#include <cglm/call/affine.h>
-#include <cglm/cam.h>
-#include <cglm/mat4.h>
-#include <cglm/util.h>
-#include <cglm/affine-pre.h>
-#include <cglm/vec3.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include "camera/camera.h"
-#include "object/object.h"
-#include "shader/shader.h"
-#include <GLFW/glfw3.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "all.h"
 #define WIDTH 800
 #define HEIGHT 800
 
@@ -25,7 +10,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 
 int main(){
-    
+    // window stuff
     if(!glfwInit()){
         printf("GLFW LOAD FAILED\n");
     };
@@ -38,16 +23,15 @@ int main(){
     if(!window){
         printf("no window for u\n");
     }
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(window);                                                                          
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        printf("GLAD LOAD FAILED\n");
-    }
-     
-    
+        printf("GLAD LOAD FAILED\n");                                                               
+    }                 
+                 
     float prev = 0;
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);                                                        
     mat4 transform = GLM_MAT4_IDENTITY_INIT;
     glm_rotate(transform, glm_rad(90), (vec3){0.0,0.0,1.0});
     glm_scale(transform, (vec3){0.5,0.5,0.5});
@@ -55,9 +39,12 @@ int main(){
     glEnable(GL_DEPTH_TEST);
     printf("this is just for testing\n");
 
+    // create shader object
     struct Shader sh;
     initShader(&sh, "src/shaders/testShader/test.vs", "src/shaders/testShader/test.fs");
+
     struct Object test = initObject("assets/obj/Cube/Cube.png", "assets/obj/Cube/Cube.obj");
+
     printf("%i\n", test.vSize);
     struct Camera cam;
     initCamera(&cam);
