@@ -1,10 +1,12 @@
 #ifndef WINDOW_H
 #define WINDOW_H
-#include "../all.h"
-struct Window{
-    GLFW* window;
+#include <GLFW/glfw3.h>
+
+typedef struct {
+    GLFWwindow* window;
 
 
-}
+} Window;
 
+void initWindow(GLFWwindow **w, int width, int height);
 #endif

@@ -1,12 +1,22 @@
-#include "all.h"
+#include "../lib/glad/glad/glad.h"
+#include <cglm/affine.h>
+#include <cglm/call/affine.h>
+#include <cglm/cam.h>
+#include <cglm/mat4.h>
+#include <cglm/util.h>
+#include <cglm/affine-pre.h>
+#include <cglm/vec3.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include "camera/camera.h"
+#include "object/object.h"
+#include "shader/shader.h"
+#include "window/window.h"
+#include <GLFW/glfw3.h>
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #define WIDTH 800
 #define HEIGHT 800
-
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
-}; 
 
 
 int main(){
@@ -14,28 +24,17 @@ int main(){
     if(!glfwInit()){
         printf("GLFW LOAD FAILED\n");
     };
-    GLFWwindow* window;  
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(WIDTH, HEIGHT, "title", NULL, NULL);
-    if(!window){
-        printf("no window for u\n");
-    }
-    glfwMakeContextCurrent(window);                                                                          
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    // Window init
+    Window window;
+    initWindow(&window.window, WIDTH, HEIGHT);
 
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
         printf("GLAD LOAD FAILED\n");                                                               
     }                 
                  
-    float prev = 0;
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);                                                        
-    mat4 transform = GLM_MAT4_IDENTITY_INIT;
-    glm_rotate(transform, glm_rad(90), (vec3){0.0,0.0,1.0});
-    glm_scale(transform, (vec3){0.5,0.5,0.5});
-
+    
     glEnable(GL_DEPTH_TEST);
     printf("this is just for testing\n");
 
@@ -48,7 +47,7 @@ int main(){
     printf("%i\n", test.vSize);
     struct Camera cam;
     initCamera(&cam);
-    while(!glfwWindowShouldClose(window)){
+    while(!glfwWindowShouldClose(window.window)){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -59,7 +58,7 @@ int main(){
         mat4 model = GLM_MAT4_IDENTITY_INIT;
         //glm_scale(model, (vec3){0.1f,0.1f,0.1f});        
         //glm_rotate(model, prev, (vec3){0.0,1.0,1.0f});
-        prev += 0.01;
+        
         mat4 view = GLM_MAT4_IDENTITY_INIT;
         float radius = 10.0f;
         glm_translate(view, (vec3){0.0f, 0.0f, -3.0f});
@@ -82,7 +81,7 @@ int main(){
         
         drawObject(&test);
         glfwPollEvents();
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(window.window);
     }
     glfwTerminate();
     return 0;
